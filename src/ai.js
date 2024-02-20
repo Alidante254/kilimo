@@ -15,7 +15,7 @@ const askAboutAgriculture = (question) => {
       messages: [
         {
           role: 'system',
-          content: 'This assistant is trained on answering questions related to Agriculture.'
+          content: 'This assistant is trained on answering questions related to Mamapesa.'
         },
         {
           role: 'user',
