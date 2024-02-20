@@ -47,8 +47,19 @@ app.post("/ussd", async (req, res) => {
           response = "CON 1. Request loan\n2. Repay loan\n0. Back\n";
           break;
         case "3":
-          response =
-            "CON Please chat with pesa AI by asking any question:\n 0. Back\n";
+          if (textParts.length > 1) {
+            const question = textParts.slice(1).join(" ");
+            try {
+              const outcome = await openai.askAboutAgriculture(question);
+              response = `END ${outcome}`;
+            } catch (error) {
+              response =
+                "END An error occurred while processing your request. Please try again.";
+            }
+          } else {
+            response =
+              "CON Please chat with pesa AI by asking any question:\n 0. Back\n";
+          }
           break;
         case "4":
           response = "CON Enter till number:\n 0. Back\n";

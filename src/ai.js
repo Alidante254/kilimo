@@ -1,52 +1,54 @@
 //const { OpenAIApi } = require("openai");
-const axios = require('axios');
-require('dotenv').config();
+const axios = require("axios");
+require("dotenv").config();
 
 /*const configuration = new OpenAIApi.Configuration({
   apiKey: process.env.OA_API_KEY,
 });*/
-const apiKey= process.env.OA_API_KEY;
+const apiKey = process.env.OA_API_KEY;
 //const openai = new OpenAIApi(configuration);
 
 const askAboutAgriculture = (question) => {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify({
-      model: 'gpt-3.5-turbo',
+      model: "gpt-3.5-turbo",
       messages: [
         {
-          role: 'system',
-          content: 'This assistant is trained on answering questions related to Mamapesa.'
+          role: "system",
+          content:
+            "This assistant is trained on answering questions related to Mamapesa. Answer using short sentences. The app uses ussd to communicate with the user.",
         },
         {
-          role: 'user',
-          content: `${question}`
-        }
+          role: "user",
+          content: `${question}`,
+        },
       ],
       temperature: 0.7,
-      max_tokens: 150
+      max_tokens: 150,
     });
 
     const config = {
-      method: 'post',
+      method: "post",
       maxBodyLength: Infinity,
-      url: 'https://api.openai.com/v1/chat/completions',
+      url: "https://api.openai.com/v1/chat/completions",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
       },
-      data
+      data,
     };
 
-    axios.request(config)
+    axios
+      .request(config)
       .then((response) => {
         const answer = response.data.choices[0].message.content.trim();
         resolve(answer);
       })
       .catch((error) => {
-        console.error('Axios Error:', error.message);
+        console.error("Axios Error:", error.message);
         if (error.response) {
-          console.error('Status Code:', error.response.status);
-          console.error('Response Data:', error.response.data);
+          console.error("Status Code:", error.response.status);
+          console.error("Response Data:", error.response.data);
         }
         reject(error);
       });
@@ -54,5 +56,5 @@ const askAboutAgriculture = (question) => {
 };
 
 module.exports = {
-  askAboutAgriculture: askAboutAgriculture
+  askAboutAgriculture: askAboutAgriculture,
 };
